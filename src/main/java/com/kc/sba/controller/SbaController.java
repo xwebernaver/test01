@@ -6,6 +6,7 @@ import com.kc.sba.service.SbaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,10 +37,10 @@ public class SbaController {
         log.info("GET /developers HTTP/1.1");
 
         //return new ArrayList<String>(Arrays.asList("snow", "elsa", "Olaf"));
-        return Arrays.asList("kim", "lee", "love");
+        return Arrays.asList("jin", "lee", "jung");
     }
 
-    @GetMapping("/create-developer")
+    @PostMapping("/create-developer")
     public List<String> createDevelopers(@Valid @RequestBody CreateDeveloper.Request request)
     {
 
