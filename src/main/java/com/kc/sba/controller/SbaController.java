@@ -25,7 +25,7 @@ public class SbaController {
 
     private final SbaService sbaService;
 
-    /*
+    /**
     public SbaController(SbaService sbaService) {
         this.sbaService = sbaService;
     }
@@ -41,16 +41,18 @@ public class SbaController {
     }
 
     @PostMapping("/create-developer")
-    public List<String> createDevelopers(@Valid @RequestBody CreateDeveloper.Request request)
+    public CreateDeveloper.Response createDevelopers(
+            @Valid @RequestBody CreateDeveloper.Request request)
     {
 
         // GET /developers HTTP/1.1
         log.info("request : {}", request);
 
-        sbaService.createDeveloper(request);
+        // sbaService.createDeveloper(request);
+        // return new ArrayList<String>(Arrays.asList("snow", "elsa", "Olaf"));
+        // return List.of("love");
 
-        //return new ArrayList<String>(Arrays.asList("snow", "elsa", "Olaf"));
-        return List.of("love");
+        return sbaService.createDeveloper(request);
     }
 
 
