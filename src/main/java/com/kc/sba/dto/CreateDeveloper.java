@@ -23,8 +23,8 @@ public class CreateDeveloper {
         @NotNull
         private DeveloperSkillType developerSkillType;
         @NotNull
-        @Min(8)
-        @Max(20)
+        @Min(0)
+        //@Max(200)
         private Integer experienceYears;
 
         @NotNull
