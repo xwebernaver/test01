@@ -100,7 +100,6 @@ public class SbaService {
         Optional<Developer> developer = developerRepository.findByMemberId(request.getMemberId());
         if(developer.isPresent()) throw new SbaException(DUPLICATED_MEMBER_ID);
          */
-
     }
 
 
