@@ -1,5 +1,6 @@
 package com.kc.sba.dto;
 
+import com.kc.sba.entity.Developer;
 import com.kc.sba.type.DeveloperLevel;
 import com.kc.sba.type.DeveloperSkillType;
 import lombok.*;
@@ -37,5 +38,26 @@ public class CreateDeveloper {
         @Min(18)
         private Integer age;
 
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Response {
+        private DeveloperLevel developerLevel;
+        private DeveloperSkillType developerSkillType;
+        private Integer experienceYears;
+        private String memberId;
+
+        public static Response fromEntity(Developer developer){
+            return Response.builder()
+                    .developerLevel(developer.getDeveloperLevel())
+                    .developerSkillType(developer.getDeveloperSkillType())
+                    .experienceYears((developer.getExperienceYears()))
+                    .memberId(developer.getMemberId())
+                    .build();
+        }
     }
 }
