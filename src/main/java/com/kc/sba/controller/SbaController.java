@@ -37,7 +37,7 @@ public class SbaController {
         log.info("GET /developers HTTP/1.1");
 
         //return new ArrayList<String>(Arrays.asList("snow", "elsa", "Olaf"));
-        return Arrays.asList("jin", "lee", "jung");
+        return Arrays.asList("jung", "park", "kim");
     }
 
     @PostMapping("/create-developer")
