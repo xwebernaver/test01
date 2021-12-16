@@ -2,13 +2,12 @@ package com.kc.sba.controller;
 
 
 import com.kc.sba.dto.CreateDeveloper;
+import com.kc.sba.dto.DeveloperDetailDto;
+import com.kc.sba.dto.DeveloperDto;
 import com.kc.sba.service.SbaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -32,13 +31,25 @@ public class SbaController {
     */
 
     @GetMapping("/developers")
-    public List<String> getAllDevelopers(){
+    public List<DeveloperDto> getAllDevelopers(){
         // GET /developers HTTP/1.1
         log.info("GET /developers HTTP/1.1");
 
         //return new ArrayList<String>(Arrays.asList("snow", "elsa", "Olaf"));
-        return Arrays.asList("jung", "park", "kim");
+        //return Arrays.asList("jung", "park", "kim");
+        return sbaService.getAllDeveloper();
     }
+
+    @GetMapping("/developers/{memberId}")
+    public DeveloperDetailDto getDeveloperDetail(
+            @PathVariable String memberId
+    ){
+        // GET /developers HTTP/1.1
+        log.info("GET /developers HTTP/1.1");
+
+        return sbaService.getDeveloperDetail(memberId);
+    }
+
 
     @PostMapping("/create-developer")
     public CreateDeveloper.Response createDevelopers(

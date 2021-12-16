@@ -1,6 +1,8 @@
 package com.kc.sba.service;
 
 import com.kc.sba.dto.CreateDeveloper;
+import com.kc.sba.dto.DeveloperDetailDto;
+import com.kc.sba.dto.DeveloperDto;
 import com.kc.sba.entity.Developer;
 import com.kc.sba.exception.SbaErrorCode;
 import com.kc.sba.exception.SbaException;
@@ -13,10 +15,11 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.kc.sba.exception.SbaErrorCode.DUPLICATED_MEMBER_ID;
-import static com.kc.sba.exception.SbaErrorCode.LEVEL_EXPERIENCE_YEAR_NOT_MATCHED;
+import static com.kc.sba.exception.SbaErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -101,4 +104,15 @@ public class SbaService {
     }
 
 
+    public List<DeveloperDto> getAllDeveloper() {
+        return developerRepository.findAll()
+                .stream().map(DeveloperDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public DeveloperDetailDto getDeveloperDetail(String memberId) {
+        return developerRepository.findByMemberId(memberId)
+                .map(DeveloperDetailDto::fromEntity)
+                .orElseThrow(() -> new SbaException(NO_DEVELOPER));
+    }
 }
