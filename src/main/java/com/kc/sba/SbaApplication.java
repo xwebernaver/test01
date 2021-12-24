@@ -12,4 +12,5 @@ public class SbaApplication {
 		SpringApplication.run(SbaApplication.class, args);
 	}
 
+	
 }
