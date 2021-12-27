@@ -3,6 +3,7 @@ package com.kc.sba.service;
 import com.kc.sba.dto.CreateDeveloper;
 import com.kc.sba.dto.DeveloperDetailDto;
 import com.kc.sba.dto.DeveloperDto;
+import com.kc.sba.dto.EditDeveloper;
 import com.kc.sba.entity.Developer;
 import com.kc.sba.exception.SbaErrorCode;
 import com.kc.sba.exception.SbaException;
@@ -70,24 +71,13 @@ public class SbaService {
 
     private void validateCreateDeveloperRequest(CreateDeveloper.Request request) {
         // business validation
-
+/**
         DeveloperLevel developerLevel = request.getDeveloperLevel();
         Integer experienceYears = request.getExperienceYears();
+        validateDeveloperLevel(developerLevel, experienceYears);
+*/
+        validateDeveloperLevel(request.getDeveloperLevel(), request.getExperienceYears());
 
-        if(developerLevel == DeveloperLevel.SENIOR
-                && experienceYears < 10) {
-            //throw new RuntimeException("SENIOR need 10 years experience.");
-            throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
-        }
-
-        if(developerLevel == DeveloperLevel.JUNGNIOR
-            && (experienceYears < 4 || experienceYears > 10)) {
-            throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
-        }
-
-        if(developerLevel == DeveloperLevel.JUNIOR && experienceYears > 4) {
-            throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
-        }
 
         //developerRepository.findByMemberId(request.getMemberId());
 
@@ -113,5 +103,48 @@ public class SbaService {
         return developerRepository.findByMemberId(memberId)
                 .map(DeveloperDetailDto::fromEntity)
                 .orElseThrow(() -> new SbaException(NO_DEVELOPER));
+    }
+
+    @Transactional
+    public DeveloperDetailDto editDeveloper(String memberId, EditDeveloper.Request request) {
+        validateEditDeveloperRequest(request, memberId);
+
+        Developer developer = developerRepository.findByMemberId(memberId).orElseThrow(
+                () -> new SbaException(NO_DEVELOPER)
+        );   // 해당 아이디에 사용자가 있는지 확인해보고 없으면 에러를 내준다.
+
+        developer.setDeveloperLevel(request.getDeveloperLevel());
+        developer.setDeveloperSkillType(request.getDeveloperSkillType());
+        developer.setExperienceYears(request.getExperienceYears());
+
+        return DeveloperDetailDto.fromEntity(developer);
+    }
+
+    private void validateEditDeveloperRequest(EditDeveloper.Request request, String memberId) {
+        /**
+        DeveloperLevel developerLevel = request.getDeveloperLevel();
+        Integer experienceYears = request.getExperienceYears();
+        validateDeveloperLevel(developerLevel, experienceYears);
+         */
+
+        validateDeveloperLevel(request.getDeveloperLevel(), request.getExperienceYears());
+
+    }
+
+    private void validateDeveloperLevel(DeveloperLevel developerLevel, Integer experienceYears) {
+        if(developerLevel == DeveloperLevel.SENIOR
+                && experienceYears < 10) {
+            //throw new RuntimeException("SENIOR need 10 years experience.");
+            throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
+        }
+
+        if(developerLevel == DeveloperLevel.JUNGNIOR
+                && (experienceYears < 4 || experienceYears > 10)) {
+            throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
+        }
+
+        if(developerLevel == DeveloperLevel.JUNIOR && experienceYears > 4) {
+            throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
+        }
     }
 }

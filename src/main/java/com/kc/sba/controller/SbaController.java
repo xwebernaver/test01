@@ -4,6 +4,7 @@ package com.kc.sba.controller;
 import com.kc.sba.dto.CreateDeveloper;
 import com.kc.sba.dto.DeveloperDetailDto;
 import com.kc.sba.dto.DeveloperDto;
+import com.kc.sba.dto.EditDeveloper;
 import com.kc.sba.service.SbaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class SbaController {
     }
     */
 
-    @GetMapping("/developers")
+    @GetMapping("/developer")
     public List<DeveloperDto> getAllDevelopers(){
         // GET /developers HTTP/1.1
         log.info("GET /developers HTTP/1.1");
@@ -40,7 +41,7 @@ public class SbaController {
         return sbaService.getAllDeveloper();
     }
 
-    @GetMapping("/developers/{memberId}")
+    @GetMapping("/developer/{memberId}")
     public DeveloperDetailDto getDeveloperDetail(
             @PathVariable String memberId
     ){
@@ -64,6 +65,17 @@ public class SbaController {
         // return List.of("love");
 
         return sbaService.createDeveloper(request);
+    }
+
+    @PutMapping("/developer/{memberId}")
+    public DeveloperDetailDto editDeveloperDetail(
+            @PathVariable String memberId,
+            @Valid @RequestBody EditDeveloper.Request request
+    ){
+        // GET /developers HTTP/1.1
+        log.info("GET /developers HTTP/1.1");
+
+        return sbaService.editDeveloper(memberId, request);
     }
 
 }
