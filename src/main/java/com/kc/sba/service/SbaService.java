@@ -1,15 +1,16 @@
 package com.kc.sba.service;
 
+import com.kc.sba.code.StatusCode;
 import com.kc.sba.dto.CreateDeveloper;
 import com.kc.sba.dto.DeveloperDetailDto;
 import com.kc.sba.dto.DeveloperDto;
 import com.kc.sba.dto.EditDeveloper;
 import com.kc.sba.entity.Developer;
-import com.kc.sba.exception.SbaErrorCode;
+import com.kc.sba.entity.RetiredDeveloper;
 import com.kc.sba.exception.SbaException;
-import com.kc.sba.respository.DeveloperRepository;
+import com.kc.sba.repository.DeveloperRepository;
+import com.kc.sba.repository.RetiredDeveloperRepository;
 import com.kc.sba.type.DeveloperLevel;
-import com.kc.sba.type.DeveloperSkillType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.kc.sba.exception.SbaErrorCode.*;
@@ -27,6 +27,7 @@ import static com.kc.sba.exception.SbaErrorCode.*;
 public class SbaService {
     private final DeveloperRepository developerRepository;
     private final EntityManager em;
+    private final RetiredDeveloperRepository retiredDeveloperRepository;
 
     @Transactional
     public CreateDeveloper.Response createDeveloper(CreateDeveloper.Request request){
@@ -38,6 +39,7 @@ public class SbaService {
                 .developerSkillType(request.getDeveloperSkillType())
                 .experienceYears(request.getExperienceYears())
                 .memberId(request.getMemberId())
+                .statusCode(StatusCode.EMPLOYED)
                 .name(request.getName())
                 .age(request.getAge())
                 .build();
@@ -93,7 +95,7 @@ public class SbaService {
     }
 
 
-    public List<DeveloperDto> getAllDeveloper() {
+    public List<DeveloperDto> getAllEmployedDeveloper() {
         return developerRepository.findAll()
                 .stream().map(DeveloperDto::fromEntity)
                 .collect(Collectors.toList());
@@ -146,5 +148,25 @@ public class SbaService {
         if(developerLevel == DeveloperLevel.JUNIOR && experienceYears > 4) {
             throw new SbaException(LEVEL_EXPERIENCE_YEAR_NOT_MATCHED);
         }
+    }
+
+    @Transactional
+    public DeveloperDetailDto deleteDeveloper(String memberId) {
+        // 1. EMPLOYED-> RETIRED
+        Developer developer = developerRepository.findByMemberId(memberId)
+                .orElseThrow(
+                        () -> new SbaException(NO_DEVELOPER)
+                );
+
+        developer.setStatusCode(StatusCode.RETIRED);
+
+
+        // 2. save into RetiredDeveloper
+        RetiredDeveloper retiredDeveloper = RetiredDeveloper.builder()
+                .memberId(developer.getMemberId())
+                .name(developer.getName())
+                .build();
+        retiredDeveloperRepository.save(retiredDeveloper);
+        return DeveloperDetailDto.fromEntity(developer);
     }
 }

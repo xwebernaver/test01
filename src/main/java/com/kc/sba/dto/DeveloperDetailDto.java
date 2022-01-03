@@ -1,6 +1,7 @@
 package com.kc.sba.dto;
 
 import com.kc.sba.entity.Developer;
+import com.kc.sba.code.StatusCode;
 import com.kc.sba.type.DeveloperLevel;
 import com.kc.sba.type.DeveloperSkillType;
 import lombok.*;
@@ -14,7 +15,8 @@ public class DeveloperDetailDto {
     private DeveloperLevel developerLevel;
     private DeveloperSkillType developerSkillType;
     private Integer experienceYears;
-    private  String memberId;
+    private String memberId;
+    private StatusCode statusCode;
     private String name;
     private Integer age;
 
@@ -24,6 +26,7 @@ public class DeveloperDetailDto {
                 .developerSkillType(developer.getDeveloperSkillType())
                 .experienceYears(developer.getExperienceYears())
                 .memberId(developer.getMemberId())
+                .statusCode(developer.getStatusCode())
                 .name(developer.getName())
                 .age(developer.getAge())
                 .build();

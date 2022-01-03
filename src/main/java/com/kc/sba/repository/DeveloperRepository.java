@@ -1,4 +1,4 @@
-package com.kc.sba.respository;
+package com.kc.sba.repository;
 
 import com.kc.sba.entity.Developer;
 import org.springframework.data.jpa.repository.JpaRepository;

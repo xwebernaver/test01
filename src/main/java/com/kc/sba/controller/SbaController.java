@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +37,7 @@ public class SbaController {
 
         //return new ArrayList<String>(Arrays.asList("snow", "elsa", "Olaf"));
         //return Arrays.asList("jung", "park", "kim");
-        return sbaService.getAllDeveloper();
+        return sbaService.getAllEmployedDeveloper();
     }
 
     @GetMapping("/developer/{memberId}")
@@ -76,6 +75,13 @@ public class SbaController {
         log.info("GET /developers HTTP/1.1");
 
         return sbaService.editDeveloper(memberId, request);
+    }
+
+
+    @DeleteMapping("/developer/{memberId}")
+    public DeveloperDetailDto deleteDeveloper(@PathVariable String memberId) {
+        //return ResponseEntity.ok(SbaService.deleteDeveloper(memberId)
+        return sbaService.deleteDeveloper(memberId);
     }
 
 }
